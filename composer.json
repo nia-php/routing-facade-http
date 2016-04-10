@@ -1,0 +1,25 @@
+{
+  "name" : "nia/routing-facade-http",
+  "description" : "HTTP routing facade to simply add HTTP routes to a given router.",
+  "require" : {
+    "php" : ">=7.0.0",
+    "nia/routing" : "*",
+    "nia/requestresponse-http" : "*"
+  },
+  "license" : "MIT",
+  "keywords" : [ "nia", "request", "response", "http", "https", "router", "routing", "facade", "simple", "rest" ],
+  "minimum-stability" : "dev",
+  "autoload" : {
+    "psr-4" : {
+      "Nia\\Routing\\Facade\\" : "sources/",
+      "Test\\Nia\\Routing\\Facade\\" : "tests/"
+    }
+  },
+  "type" : "library",
+  "homepage" : "http://www.nat-software.de",
+  "authors" : [ {
+    "name" : "Patrick Ullmann",
+    "email" : "patrick.ullmann@nat-software.de",
+    "role" : "lead"
+  } ]
+}
