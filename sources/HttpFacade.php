@@ -22,6 +22,7 @@ use Nia\Routing\Handler\HandlerInterface;
 use Nia\Routing\Route\RouteInterface;
 use Nia\Routing\Route\Route;
 use Nia\Routing\Router\RouterInterface;
+use Nia\Routing\Condition\OrCompositeCondition;
 
 /**
  * HTTP routing facade to simply add HTTP routes to a given router.
@@ -241,6 +242,52 @@ class HttpFacade
         $route = $this->createRouteForMethod(HttpRequestInterface::METHOD_TRACE, $regex, $handler, $condition, $filter);
 
         $this->router->addRoute($route);
+
+        return $this;
+    }
+
+    /**
+     * Creates a HTTP/* route.
+     *
+     * @param string $regex
+     *            The regex for the route.
+     * @param HandlerInterface $handler
+     *            The used handler to handle the match.
+     * @param ConditionInterface $condition
+     *            Optional condition.
+     * @param FilterInterface $filter
+     *            Optional filter.
+     * @return HttpFacade Reference to this instance.
+     */
+    public function any($regex, HandlerInterface $handler, ConditionInterface $condition = null, FilterInterface $filter = null): HttpFacade
+    {
+        $conditions = [
+            new OrCompositeCondition([
+                new MethodCondition(HttpRequestInterface::METHOD_GET),
+                new MethodCondition(HttpRequestInterface::METHOD_POST),
+                new MethodCondition(HttpRequestInterface::METHOD_PUT),
+                new MethodCondition(HttpRequestInterface::METHOD_PATCH),
+                new MethodCondition(HttpRequestInterface::METHOD_DELETE),
+                new MethodCondition(HttpRequestInterface::METHOD_HEAD),
+                new MethodCondition(HttpRequestInterface::METHOD_OPTIONS),
+                new MethodCondition(HttpRequestInterface::METHOD_TRACE),
+            ]),
+            new RegexPathCondition($regex)
+        ];
+
+        if ($condition) {
+            $conditions[] = $condition;
+        }
+
+        $filters = [
+            new RegexPathContextFillerFilter($regex)
+        ];
+
+        if ($filter) {
+            $filters[] = $filter;
+        }
+
+        $this->router->addRoute(new Route(new CompositeCondition($conditions), new CompositeFilter($filters), $handler));
 
         return $this;
     }
