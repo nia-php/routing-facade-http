@@ -10,7 +10,7 @@
 declare(strict_types = 1);
 namespace Test\Nia\Routing\Facade;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Nia\Routing\Facade;
 use Nia\Routing\Router\Router;
 use Nia\Routing\Facade\HttpFacade;
@@ -26,7 +26,7 @@ use Nia\Routing\Condition\ConditionInterface;
 /**
  * Unit test for \Nia\Routing\Facade\HttpFacade.
  */
-class HttpFacadeTest extends PHPUnit_Framework_TestCase
+class HttpFacadeTest extends TestCase
 {
 
     private $router = null;
@@ -49,7 +49,7 @@ class HttpFacadeTest extends PHPUnit_Framework_TestCase
     public function testGet($method)
     {
         $regex = '#^/$#';
-        $handler = $this->getMock(HandlerInterface::class);
+        $handler = $this->createMock(HandlerInterface::class);
 
         $facade = new HttpFacade($this->router);
         $facade->get($regex, $handler);
@@ -82,9 +82,9 @@ class HttpFacadeTest extends PHPUnit_Framework_TestCase
     public function testGetOptionals($method)
     {
         $regex = '#^/$#';
-        $handler = $this->getMock(HandlerInterface::class);
-        $optionalCondition = $this->getMock(ConditionInterface::class);
-        $optionalFilter = $this->getMock(FilterInterface::class);
+        $handler = $this->createMock(HandlerInterface::class);
+        $optionalCondition = $this->createMock(ConditionInterface::class);
+        $optionalFilter = $this->createMock(FilterInterface::class);
 
         $facade = new HttpFacade($this->router);
         $facade->get($regex, $handler, $optionalCondition, $optionalFilter);
